@@ -19,12 +19,18 @@ class ProductController extends Controller
         $limit = $request->input('limit') ? $request->input('limit') : 10;
         $name = $request->input('name');
         $enable = $request->input('enable') ? $request->input('enable') : true;
+        $show_image = $request->input('show_image');
 
         $product = Product::where('enable',$enable)->with('category_product.category');
         
+        if($show_image){
+            $product->with('product_image.image');
+        }
+
         if($name){
             $product->where('name','like','%'.$name.'%');
         }
+
 
         return response()->json([
             'status' => true,
